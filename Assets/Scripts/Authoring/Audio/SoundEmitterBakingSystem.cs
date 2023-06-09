@@ -6,15 +6,14 @@ namespace Unity.MegaCity.Audio
 {
     [WorldSystemFilter(WorldSystemFilterFlags.BakingSystem)]
     [UpdateInGroup(typeof(PostBakingSystemGroup))]
-    [BakingVersion("Julian", 1)]
-    public partial struct SoundEmitterBakingSystem : ISystem
+    [BakingVersion("Abdul", 1)]
+    internal partial class SoundEmitterBakingSystem : SystemBase
     {
-        public void OnUpdate(ref SystemState state)
+        protected override void OnUpdate()
         {
-            var ecb = new EntityCommandBuffer(Collections.Allocator.Temp);
-            foreach (var (soundEmitterBakingData, entity) in SystemAPI.Query<RefRW<SoundEmitterBakingData>>().WithEntityAccess()) 
+            Entities.ForEach((Entity entity, ref SoundEmitterBakingData soundEmitterBakingData) =>
             {
-                var data = soundEmitterBakingData.ValueRO.Authoring.Value;
+                var data = soundEmitterBakingData.Authoring.Value;
                 SoundEmitter emitter = new SoundEmitter();
 
                 emitter.position = data.transform.position;
@@ -23,14 +22,12 @@ namespace Unity.MegaCity.Audio
                 if (data.definition != null)
                 {
                     emitter.definitionIndex = data.definition.data.definitionIndex;
-                    data.definition.Reflect(state.World);
+                    data.definition.Reflect(World);
                 }
 
-                ecb.AddComponent(entity, emitter);
-            }
+                EntityManager.AddComponentData(entity, emitter);
 
-            ecb.Playback(state.EntityManager);
-            ecb.Dispose();
+            }).WithStructuralChanges().Run();
         }
     }
 }

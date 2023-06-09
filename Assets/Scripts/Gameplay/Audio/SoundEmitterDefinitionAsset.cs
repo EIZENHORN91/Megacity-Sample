@@ -30,19 +30,21 @@ namespace Unity.MegaCity.Audio
                 return entityManager.Exists(definitionEntity) ? definitionEntity : Entity.Null;
 
             definitionEntity = entityManager.CreateEntity();
-            entityManager.AddComponentData(definitionEntity, data);
+            //entityManager.AddComponentData(definitionEntity, data);
             return definitionEntity;
         }
 
-        public void Reflect(World world)
+        public Entity Reflect(World world)
         {
             if (!world.IsCreated)
-                return;
+                return Entity.Null;
             EntityManager entityManager = world.EntityManager;
             // These extra checks are needed to guard against MonoBehaviour destruction order that would otherwise cause errors in scenes like _SoundObjects
             var entity = GetEntity(entityManager);
             if (entity != Entity.Null && entityManager.HasComponent<ECSoundEmitterDefinition>(entity))
-                entityManager.SetComponentData(entity, data);
+                //entityManager.SetComponentData(entity, data);
+                return entity;
+            return Entity.Null;
         }
 
 #if UNITY_EDITOR

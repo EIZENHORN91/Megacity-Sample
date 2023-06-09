@@ -12,7 +12,8 @@
         "Unity.Physics.Hybrid",
         "UnityEngine.UI",
         "UnityEditor.UI",
-        "Unity.Burst"
+        "Unity.Burst",
+        "Unity.Physics.Custom"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
