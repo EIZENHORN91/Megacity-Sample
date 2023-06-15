@@ -113,7 +113,7 @@ namespace Unity.MegaCity.Traffic
     {
         public const float kCellSize = 64.0f;
 
-        public NativeMultiHashMap<int, VehicleCell>.ParallelWriter CellMap;
+        public NativeParallelMultiHashMap<int, VehicleCell>.ParallelWriter CellMap;
 
         public void Execute(in VehiclePhysicsState physicsState)
         {
@@ -136,7 +136,7 @@ namespace Unity.MegaCity.Traffic
     {
         public float3 Pos;
         public float3 Velocity;
-        public NativeMultiHashMap<int, VehicleCell> CellMap;
+        public NativeParallelMultiHashMap<int, VehicleCell> CellMap;
 
         public void Execute()
         {

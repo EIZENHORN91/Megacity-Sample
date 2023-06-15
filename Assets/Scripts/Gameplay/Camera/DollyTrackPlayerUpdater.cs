@@ -18,17 +18,17 @@ namespace Unity.MegaCity.CameraManagement
         public float DeltaTime;
 
         public void Execute(
-            ref TransformAspect transformAspect,
+            ref LocalTransform localTransform,
             in PlayerVehicleSettings playerVehicleSettings)
         {
-            if (math.distancesq(transformAspect.WorldPosition, DollyTrackPosition) > playerVehicleSettings.TargetSqLerpThreshold)
+            if (math.distancesq(localTransform.Position, DollyTrackPosition) > playerVehicleSettings.TargetSqLerpThreshold)
             {
-                transformAspect.WorldPosition = DollyTrackPosition;
+                localTransform.Position = DollyTrackPosition;
             }
 
-            transformAspect.WorldPosition = math.lerp(transformAspect.WorldPosition, DollyTrackPosition,
+            localTransform.Position = math.lerp(localTransform.Position, DollyTrackPosition,
                 DeltaTime * playerVehicleSettings.TargetFollowDamping);
-            transformAspect.WorldRotation = math.slerp(transformAspect.WorldRotation, DollyTrackRotation,
+            localTransform.Rotation = math.slerp(localTransform.Rotation, DollyTrackRotation,
                 DeltaTime * playerVehicleSettings.TargetFollowDamping);
         }
     }

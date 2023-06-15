@@ -10,7 +10,7 @@ namespace Unity.MegaCity.Traffic
     /// A debug system to draw lines in 3D space using 2 vectors.
     /// </summary>
     [UpdateInGroup(typeof(PresentationSystemGroup))]
-    public class DebugLineSystem : EntityCommandBufferSystem
+    public partial class DebugLineSystem : EntityCommandBufferSystem
     {
         public struct LineData3D
         {

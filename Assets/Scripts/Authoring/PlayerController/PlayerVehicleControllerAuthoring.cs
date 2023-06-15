@@ -52,11 +52,12 @@ namespace Unity.MegaCity.Gameplay
 
     }
 
-    [BakingVersion("Abdul", 2)]
+    [BakingVersion("Julian", 3)]
     public class PlayerVehicleControllerBaker : Baker<PlayerVehicleControllerAuthoring>
     {
         public override void Bake(PlayerVehicleControllerAuthoring authoring)
         {
+            var entity = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
             // Add player inputs component
             var input = new PlayerVehicleInput
             {
@@ -67,7 +68,7 @@ namespace Unity.MegaCity.Gameplay
                 LeftTrigger2 = 0,
                 RightStickClick = 0
             };
-            AddComponent(input);
+            AddComponent(entity, input);
 
             // Get physics damping data
             var physicsBody = GetComponent<PhysicsBodyAuthoring>();
@@ -107,12 +108,12 @@ namespace Unity.MegaCity.Gameplay
                 TargetFollowDamping = authoring.TargetFollowDamping,
                 TargetSqLerpThreshold = authoring.TargetSqLerpThreshold
             };
-            AddComponent(settings);
+            AddComponent(entity, settings);
 
             // Add vehicle state component
-            AddComponent<VehicleThrust>();
-            AddComponent<VehicleBraking>();
-            AddComponent<VehicleRoll>();
+            AddComponent<VehicleThrust>(entity);
+            AddComponent<VehicleBraking>(entity);
+            AddComponent<VehicleRoll>(entity);
 
             // Add player camera settings
             var cameraSettings = new PlayerVehicleCameraSettings
@@ -121,7 +122,7 @@ namespace Unity.MegaCity.Gameplay
                 FollowCameraZBreakSpeed = authoring.FollowCameraZBreakSpeed,
                 FollowCameraZFollow = 0
             };
-            AddComponent(cameraSettings);
+            AddComponent(entity, cameraSettings);
 
             // Bake vehicle animation curves
             var bankCurveBlob = AnimationCurveBlob.CreateBlob(authoring.BankVolatilityCurve, Allocator.Persistent);
@@ -139,7 +140,7 @@ namespace Unity.MegaCity.Gameplay
             blobAssetStore.TryAdd(ref bankCurveBlob);
             blobAssetStore.TryAdd(ref pitchCurveBlob);
             blobAssetStore.TryAdd(ref yawCurveBlob);
-            AddComponent(vehicleVolatilityCurves);
+            AddComponent(entity, vehicleVolatilityCurves);
 
             blobAssetStore.Dispose();
         }

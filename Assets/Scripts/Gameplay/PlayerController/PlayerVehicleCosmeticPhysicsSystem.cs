@@ -19,11 +19,11 @@ namespace Unity.MegaCity.Gameplay
         public VehicleBraking VehicleBraking;
         public VehicleRoll VehicleRoll;
 
-        public void Execute(ref TransformAspect transformAspect)
+        public void Execute(ref LocalTransform transform)
         {
             var roll = VehicleRoll.ManualRollValue != 0 ? VehicleRoll.ManualRollValue : VehicleRoll.BankAmount;
             var eulerZXY = math.radians(new float3(VehicleBraking.PitchPseudoBraking, VehicleBraking.YawBreakRotation, roll));
-            transformAspect.LocalRotation = quaternion.EulerZXY(eulerZXY);
+            transform.Rotation = quaternion.EulerZXY(eulerZXY);
         }
     }
 

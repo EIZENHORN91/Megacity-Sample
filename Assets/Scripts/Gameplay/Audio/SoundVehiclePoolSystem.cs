@@ -90,7 +90,7 @@ namespace Unity.MegaCity.Audio
             var maxDistanceSq = m_AudioSettings.MaxSqDistance;
             Entities
                 .WithAll<VehiclePathing>()
-                .ForEach((Entity entity, in WorldTransform transform) =>
+                .ForEach((Entity entity, in LocalToWorld transform) =>
             {
                 var sqDist = math.distancesq(transform.Position, cameraPosition);
                 if (sqDist < maxDistanceSq && sqDist < maxSqDistanceInClosestSet)

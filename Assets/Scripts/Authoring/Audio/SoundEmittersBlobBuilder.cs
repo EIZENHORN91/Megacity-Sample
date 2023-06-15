@@ -20,7 +20,7 @@ namespace Unity.MegaCity.Audio
             using var blobBuilder = new BlobBuilder(Allocator.Temp);
             var query = GetEntityQuery(typeof(SoundEmitterBakingData));
             var entityCount = query.CalculateEntityCount();
-            var hashMap = new NativeMultiHashMap<int, SingleEmitterData>(entityCount, Allocator.Temp);
+            var hashMap = new NativeParallelMultiHashMap<int, SingleEmitterData>(entityCount, Allocator.Temp);
             var highestIndex = 0;
 
             var rootSceneEntity = Entity.Null;

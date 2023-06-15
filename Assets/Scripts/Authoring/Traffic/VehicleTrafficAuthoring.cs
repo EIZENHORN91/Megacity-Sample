@@ -10,14 +10,15 @@ namespace Unity.MegaCity.Traffic
     {
     }
 
-    [BakingVersion("Abdul", 1)]
+    [BakingVersion("Julian", 2)]
     public class VehicleTrafficBaker : Baker<VehicleTrafficAuthoring>
     {
         public override void Bake(VehicleTrafficAuthoring authoring)
         {
-            AddComponent<VehiclePathing>();
-            AddComponent<VehicleTargetPosition>();
-            AddComponent<VehiclePhysicsState>();
+            var entity = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
+            AddComponent<VehiclePathing>(entity);
+            AddComponent<VehicleTargetPosition>(entity);
+            AddComponent<VehiclePhysicsState>(entity);
         }
     }
 }

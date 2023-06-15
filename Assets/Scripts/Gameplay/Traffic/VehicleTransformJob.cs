@@ -14,13 +14,13 @@ namespace Unity.MegaCity.Traffic
     {
         public void Execute(
             in VehiclePhysicsState physicsState,
-            ref TransformAspect transformAspect)
+            ref LocalTransform transformAspect)
         {
-            transformAspect.WorldPosition = physicsState.Position;
+            transformAspect.Position = physicsState.Position;
 
             var orient = quaternion.LookRotation(physicsState.Heading, up());
             var bankQuaternion = FastBankQuaternion(physicsState.BankRadians);
-            transformAspect.WorldRotation = mul(orient, bankQuaternion);
+            transformAspect.Rotation = mul(orient, bankQuaternion);
         }
 
         // Uses unexpanded Taylor root expression (x, 1 respectively) for sin(), cos().

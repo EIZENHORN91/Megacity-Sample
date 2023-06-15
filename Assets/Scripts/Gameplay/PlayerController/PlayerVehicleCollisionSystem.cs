@@ -74,6 +74,7 @@ namespace Unity.MegaCity.Gameplay
                 PhysicsVelocities = _physicsVelocities,
                 VehicleThrusts = _vehicleThrust
             }.Schedule(simulationSingleton, state.Dependency);
+            state.Dependency.Complete();
         }
     }
 }

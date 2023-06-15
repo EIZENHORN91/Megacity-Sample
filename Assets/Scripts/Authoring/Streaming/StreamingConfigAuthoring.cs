@@ -28,11 +28,12 @@ namespace Unity.MegaCity.Streaming
     }
 
 #if UNITY_EDITOR
-    [BakingVersion("Abdul", 1)]
+    [BakingVersion("Julian", 2)]
     public class StreamingConfigAuthoringBaker : Baker<StreamingConfigAuthoring>
     {
         public override void Bake(StreamingConfigAuthoring authoring)
         {
+            var entity = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
             var config = new StreamingConfig()
             {
                 DistanceForStreamingIn = authoring.StreamingInDistance,
@@ -44,7 +45,7 @@ namespace Unity.MegaCity.Streaming
                     new Unity.Entities.Hash128(
                         AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(authoring.TrafficScene))),
             };
-            AddComponent(config);
+            AddComponent(entity, config);
         }
     }
 #endif

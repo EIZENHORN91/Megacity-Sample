@@ -36,8 +36,8 @@ namespace Unity.MegaCity.Traffic
         private float3 m_PlayerPosition;
         private float3 m_PlayerVelocity;
 
-        private NativeMultiHashMap<int, VehicleCell> _Cells;
-        private NativeMultiHashMap<int, VehicleSlotData> _VehicleMap;
+        private NativeParallelMultiHashMap<int, VehicleCell> _Cells;
+        private NativeParallelMultiHashMap<int, VehicleSlotData> _VehicleMap;
 
 #if UNITY_EDITOR && USE_DEBUG_LINES
         [Inject] private DebugLineSystem _DebugLines;
@@ -88,8 +88,8 @@ namespace Unity.MegaCity.Traffic
             {
                 _player = GetSingletonEntity<PlayerVehicleInput>();
                 trafficSettings = GetSingleton<TrafficSettingsData>();
-                _Cells = new NativeMultiHashMap<int, VehicleCell>(trafficSettings.PoolCellVehicleSize, Allocator.Persistent);
-                _VehicleMap = new NativeMultiHashMap<int, VehicleSlotData>(trafficSettings.PoolCellVehicleSize, Allocator.Persistent);
+                _Cells = new NativeParallelMultiHashMap<int, VehicleCell>(trafficSettings.PoolCellVehicleSize, Allocator.Persistent);
+                _VehicleMap = new NativeParallelMultiHashMap<int, VehicleSlotData>(trafficSettings.PoolCellVehicleSize, Allocator.Persistent);
             }
 #if UNITY_EDITOR && USE_OCCUPANCY_DEBUG
             if (!doneOneTimeInit)
@@ -297,7 +297,7 @@ namespace Unity.MegaCity.Traffic
             //Assigns the position and velocity based on PlayerVehicleInput entity
             if (_player != Entity.Null)
             {
-                m_PlayerPosition = state.EntityManager.GetComponentData<WorldTransform>(_player).Position;
+                m_PlayerPosition = state.EntityManager.GetComponentData<LocalTransform>(_player).Position;
                 m_PlayerVelocity = state.EntityManager.GetComponentData<PhysicsVelocity>(_player).Linear;
             }
         }

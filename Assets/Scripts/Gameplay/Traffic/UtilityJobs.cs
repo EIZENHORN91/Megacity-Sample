@@ -21,7 +21,7 @@ namespace Unity.MegaCity.Traffic
     [BurstCompile]
     public struct ClearHashJob<T> : IJob where T : unmanaged
     {
-        [WriteOnly] public NativeMultiHashMap<int, T> Hash;
+        [WriteOnly] public NativeParallelMultiHashMap<int, T> Hash;
 
         public void Execute()
         {

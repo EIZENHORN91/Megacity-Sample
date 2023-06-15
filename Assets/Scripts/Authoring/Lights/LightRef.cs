@@ -11,12 +11,13 @@ namespace Unity.MegaCity.Lights
         public GameObject LightReference;
     }
 
-    [BakingVersion("Abdul", 1)]
+    [BakingVersion("Julian", 2)]
     public class LightRefBaker : Baker<LightRef>
     {
         public override void Bake(LightRef authoring)
         {
-            AddSharedComponentManaged(new SharedLight { Value = authoring.LightReference });
+            var entity = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
+            AddSharedComponentManaged(entity, new SharedLight { Value = authoring.LightReference });
         }
     }
 }

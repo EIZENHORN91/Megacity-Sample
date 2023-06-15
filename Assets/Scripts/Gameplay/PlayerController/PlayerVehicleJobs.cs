@@ -15,7 +15,7 @@ namespace Unity.MegaCity.Gameplay
         public void Execute(
             ref VehicleRoll vehicleRoll,
             in VehicleVolatilityCurves curves,
-            in WorldTransform worldTransform,
+            in LocalToWorld worldTransform,
             in PhysicsVelocity velocity,
             in PlayerVehicleSettings vehicleSettings,
             in PlayerVehicleInput controlInput)
@@ -28,11 +28,11 @@ namespace Unity.MegaCity.Gameplay
 
         private float CalculateBanking(
             ref AnimationCurveBlob bankVolatilityCurve,
-            in WorldTransform worldTransform,
+            in LocalToWorld worldTransform,
             in PhysicsVelocity velocity,
             in PlayerVehicleSettings vehicleSettings)
         {
-            var vehicleVelocityLocal = math.rotate(worldTransform.ToMatrix(), velocity.Linear);
+            var vehicleVelocityLocal = math.rotate(worldTransform.Value, velocity.Linear);
             var momentumRaw = vehicleVelocityLocal.x * vehicleSettings.InvMaxVelocity * vehicleSettings.BankVolatility;
             var momentum = math.clamp(momentumRaw, -1, 1);
             var bankAmount = vehicleSettings.MaxBankAngle * math.sign(momentum) *
@@ -149,7 +149,7 @@ namespace Unity.MegaCity.Gameplay
 
         public void Execute(
             in PlayerVehicleInput controlInput,
-            in WorldTransform worldTransform,
+            in LocalToWorld worldTransform,
             in PhysicsVelocity velocity,
             in VehicleVolatilityCurves curves,
             in VehicleThrust vehicleThrust,
@@ -194,7 +194,7 @@ namespace Unity.MegaCity.Gameplay
 
         private void ApplyBreakingPseudoPhysics(
             in PhysicsVelocity velocity,
-            in WorldTransform worldTransform,
+            in LocalToWorld worldTransform,
             in PlayerVehicleSettings vehicleSettings,
             float deltaTime,
             ref PlayerVehicleCameraSettings cameraSettings,
@@ -202,7 +202,7 @@ namespace Unity.MegaCity.Gameplay
             ref AnimationCurveBlob yawVolatilityCurve,
             ref VehicleBraking vehicleBraking)
         {
-            var vehicleVelocityLocal = math.rotate(worldTransform.ToMatrix(), velocity.Linear);
+            var vehicleVelocityLocal = math.rotate(worldTransform.Value, velocity.Linear);
             vehicleVelocityLocal.y = 0;
 
             var localSpeed = math.length(vehicleVelocityLocal);

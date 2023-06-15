@@ -112,7 +112,7 @@ namespace Unity.MegaCity.Lights
             public float3 CameraPos;
             [ReadOnly] public NativeArray<float4> CullingPlanes;
 
-            public void Execute(Entity entity, in WorldTransform worldTransform)
+            public void Execute(Entity entity, in LocalToWorld worldTransform)
             {
                 if (FrustumPlanes.Intersect(CullingPlanes, worldTransform.Position, 20) == FrustumPlanes.IntersectResult.Out)
                     return;
@@ -215,7 +215,7 @@ namespace Unity.MegaCity.Lights
                     var lightProxyArchetype = EntityManager.CreateArchetype
                     (
                         ComponentType.ReadWrite<LightPoolIndex>(),
-                        ComponentType.ReadWrite<WorldTransform>()
+                        ComponentType.ReadWrite<LocalTransform>()
                     );
 
                     var lightProxies = new NativeArray<Entity>(m_NewSharedLights.CalculateEntityCount(), Allocator.Temp);
@@ -232,7 +232,7 @@ namespace Unity.MegaCity.Lights
                         var lightEntity = chunk.GetNativeArray(archetypeLightEntityType);
                         var poolIndex = EnsurePool(sharedLight.Value);
 
-                        var localToWorldArray = chunk.GetNativeArray(archetypeLocalToWorldType);
+                        var localToWorldArray = chunk.GetNativeArray(ref archetypeLocalToWorldType);
                         for (int i = 0; i < chunk.Count; ++i)
                         {
                             var position = localToWorldArray[i].Position;
@@ -244,7 +244,7 @@ namespace Unity.MegaCity.Lights
                                 PrefabIndex = poolIndex,
                                 InstanceIndex = -1
                             });
-                            EntityManager.SetComponentData(proxy, new WorldTransform
+                            EntityManager.SetComponentData(proxy, new LocalTransform
                             {
                                 Position = position,
                                 Rotation = rotation,
@@ -305,7 +305,7 @@ namespace Unity.MegaCity.Lights
 
             var lightPoolIndexFromEntity = GetComponentLookup<LightPoolIndex>();
             {
-                var worldTransformLookup = GetComponentLookup<WorldTransform>(true);
+                var worldTransformLookup = GetComponentLookup<LocalTransform>(true);
                 var searchForAvailableAt = 0;
                 for (int i = 0; i < ClosestLights.Length; ++i)
                 {

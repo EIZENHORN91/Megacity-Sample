@@ -25,12 +25,12 @@ namespace Unity.MegaCity.CameraManagement
         public float DeltaTime;
 
         public void Execute(
-            ref TransformAspect transformAspect,
+            ref LocalTransform transform,
             in PlayerHybridCameraTarget playerHybridCameraTarget)
         {
-            transformAspect.WorldPosition = math.lerp(transformAspect.WorldPosition, LocalToWorld.Position,
+            transform.Position = math.lerp(transform.Position, LocalToWorld.Position,
                 DeltaTime * playerHybridCameraTarget.TargetFollowDamping);
-            transformAspect.WorldRotation = math.slerp(transformAspect.WorldRotation, LocalToWorld.Rotation,
+            transform.Rotation = math.slerp(transform.Rotation, LocalToWorld.Rotation,
                 DeltaTime * playerHybridCameraTarget.TargetFollowDamping);
         }
     }

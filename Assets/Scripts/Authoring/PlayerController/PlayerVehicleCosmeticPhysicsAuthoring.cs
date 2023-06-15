@@ -11,12 +11,13 @@ namespace Unity.MegaCity.Gameplay
     {
     }
 
-    [BakingVersion("Abdul", 1)]
+    [BakingVersion("Julian", 2)]
     public class PlayerVehicleCosmeticPhysicsBaker : Baker<PlayerVehicleCosmeticPhysicsAuthoring>
     {
         public override void Bake(PlayerVehicleCosmeticPhysicsAuthoring authoring)
         {
-            AddComponent<PlayerVehicleCosmeticPhysics>();
+            var entity = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
+            AddComponent<PlayerVehicleCosmeticPhysics>(entity);
         }
     }
 }

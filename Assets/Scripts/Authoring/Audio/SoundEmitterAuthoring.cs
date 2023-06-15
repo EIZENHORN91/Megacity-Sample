@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Entities;
 using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
 
 namespace Unity.MegaCity.Audio
@@ -19,17 +20,18 @@ namespace Unity.MegaCity.Audio
         public UnityObjectRef<SoundEmitterAuthoring> Authoring;
     }
 
-    [BakingVersion("Abdul", 1)]
-    public class SoundEmitterBaker: Baker<SoundEmitterAuthoring>
-    {
-        public override void Bake(SoundEmitterAuthoring authoring)
-        {
-            AddComponent(new SoundEmitterBakingData { Authoring = authoring });
-        }
-    }
-
     public class SoundEmitterAuthoring : MonoBehaviour
     {
+        [BakingVersion("Julian", 2)]
+        public class SoundEmitterBaker : Baker<SoundEmitterAuthoring>
+        {
+            public override void Bake(SoundEmitterAuthoring authoring)
+            {
+                var entity = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
+                AddComponent(entity, new SoundEmitterBakingData { Authoring = authoring });
+            }
+        }
+
         public SoundEmitterDefinitionAsset definition;
         public float volume
         {
@@ -199,32 +201,5 @@ namespace Unity.MegaCity.Audio
         }
 
 #endif
-    }
-
-    [WorldSystemFilter(WorldSystemFilterFlags.BakingSystem)]
-    [UpdateInGroup(typeof(PostBakingSystemGroup))]
-    [BakingVersion("Abdul", 1)]
-    internal partial class SoundEmitterBakingSystem : SystemBase
-    {
-        protected override void OnUpdate()
-        {
-            Entities.ForEach((Entity entity, ref SoundEmitterBakingData soundEmitterBakingData) =>
-            {
-                var data = soundEmitterBakingData.Authoring.Value;
-                SoundEmitter emitter = new SoundEmitter();
-
-                emitter.position = data.transform.position;
-                emitter.coneDirection = -data.transform.right;
-
-                if (data.definition != null)
-                {
-                    emitter.definitionIndex = data.definition.data.definitionIndex;
-                    data.definition.Reflect(World);
-                }
-
-                EntityManager.AddComponentData(entity, emitter);
-
-            }).WithStructuralChanges().Run();
-        }
     }
 }

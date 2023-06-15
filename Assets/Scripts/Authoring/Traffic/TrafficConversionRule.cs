@@ -17,11 +17,13 @@ namespace Unity.MegaCity.Traffic
         public Entity Entity;
     }
 
+    [BakingVersion("Julian", 2)]
     public class TrafficPathBaker: Baker<Path>
     {
         public override void Bake(Path authoring)
         {
-            AddComponent(new TrafficPathBakingData { Authoring = authoring, Entity = GetEntity(authoring.gameObject)});
+            var entity = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
+            AddComponent(entity, new TrafficPathBakingData { Authoring = authoring, Entity = entity });
         }
     }
 

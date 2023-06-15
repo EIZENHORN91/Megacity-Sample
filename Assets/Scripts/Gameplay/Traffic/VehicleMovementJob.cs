@@ -14,7 +14,7 @@ namespace Unity.MegaCity.Traffic
     {
         public float TimeStep;
         [ReadOnly]
-        public NativeMultiHashMap<int, VehicleCell> Cells;
+        public NativeParallelMultiHashMap<int, VehicleCell> Cells;
 
 #if UNITY_EDITOR && USE_DEBUG_LINES
             // These Debug Lines can be turned on to see the vectors coming from the vehicles
@@ -25,7 +25,7 @@ namespace Unity.MegaCity.Traffic
         private float3 CellAvoidance(int key, float3 pos, float3 velocity, float radius)
         {
             VehicleCell cell;
-            NativeMultiHashMapIterator<int> iter;
+            NativeParallelMultiHashMapIterator<int> iter;
 
             if (length(velocity) < 0.001f || !Cells.TryGetFirstValue(key, out cell, out iter))
             {

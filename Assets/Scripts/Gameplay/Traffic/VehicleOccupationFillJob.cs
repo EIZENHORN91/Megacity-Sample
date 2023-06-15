@@ -11,7 +11,7 @@ namespace Unity.MegaCity.Traffic
     [BurstCompile]
     public partial struct OccupationAliasing : IJobEntity
     {
-        public NativeMultiHashMap<int, VehicleSlotData>.ParallelWriter OccupancyToVehicleMap;
+        public NativeParallelMultiHashMap<int, VehicleSlotData>.ParallelWriter OccupancyToVehicleMap;
         public RoadSectionBlobRef RoadSectionBlobRef;
 
         private int CurvePositionToOccupancyIndex(int roadIndex, int laneIndex, float curvePos)
@@ -63,7 +63,7 @@ namespace Unity.MegaCity.Traffic
     public struct OccupationFill2 : IJobNativeMultiHashMapMergedSharedKeyIndices
     {
         [NativeDisableParallelForRestriction] public NativeArray<Occupation> Occupations;
-        [ReadOnly] public NativeMultiHashMap<int, VehicleSlotData> _VehicleMap;
+        [ReadOnly] public NativeParallelMultiHashMap<int, VehicleSlotData> _VehicleMap;
 
         public void ExecuteFirst(int index)
         {
@@ -97,7 +97,7 @@ namespace Unity.MegaCity.Traffic
     }
 
     [BurstCompile]
-    public struct OccupationFill : IJobEntity
+    public partial struct OccupationFill : IJobEntity
     {
         [ReadOnly] public NativeArray<RoadSection> RoadSections;
 

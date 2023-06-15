@@ -11,12 +11,13 @@ namespace Unity.MegaCity.Gameplay
     {
     }
 
-    [BakingVersion("Abdul", 1)]
+    [BakingVersion("Julian", 2)]
     public class PlayerCameraTargetBaker : Baker<PlayerCameraTargetAuthoring>
     {
         public override void Bake(PlayerCameraTargetAuthoring authoring)
         {
-            AddComponent<PlayerCameraTarget>();
+            var entity = GetEntity(authoring.gameObject, TransformUsageFlags.Dynamic);
+            AddComponent<PlayerCameraTarget>(entity);
         }
     }
 }
